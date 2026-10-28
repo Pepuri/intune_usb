@@ -1,5 +1,5 @@
 {
-  "status": "template_not_deployed",
+  "status": "function_deployed_web_pending",
   "storage": "OneLake Lakehouse Files; no SQL database",
   "runtime": "Python 3.12, App Service Linux + Functions v4 Linux",
   "web_startup_command": "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --no-proxy-headers --no-access-log",
@@ -28,8 +28,7 @@
     "dbo.usb_app_jobs"
   ],
   "cloud_policy_writes_default": false,
-  "source_published": false,
-  "azure_deployed": false,
+  "source_published": true,
   "validation_pending": [
     "Linux build",
     "Customer environment configuration",
@@ -37,5 +36,15 @@
     "OneLake managed identity",
     "Fabric natural scheduled execution",
     "Endpoint enforcement"
-  ]
+  ],
+  "azure_function_deployed": true,
+  "azure_web_deployed": false,
+  "remote_function_verification": {
+    "health_http": 200,
+    "anonymous_api_http": 401,
+    "spoofed_identity_http": 401,
+    "remote_sso_tested": false,
+    "runtime": "Python 3.12",
+    "intune_writes_enabled": false
+  }
 }

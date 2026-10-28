@@ -30,3 +30,8 @@ fixture의 ID는 실존 리소스를 가리키지 않으며 예제 이름도 모
 모든 정책 쓰기는 기본 OFF입니다. 현재 정책 작성기는 비활성 샘플 사용자 40명·지정 정책 1개·빈 PC 그룹을 전제로 제한됩니다.
 일반 고객사 운영 정책으로 확대하려면 대상 설정과 보호 조건을 별도로 검토해야 합니다.
 설정 순서와 검증 범위는 [DEPLOYMENT.md](DEPLOYMENT.md), 게시 절차는 [PUBLISHING.md](PUBLISHING.md)를 참고하세요.
+
+## 현재 배포 상태
+
+2026-10-28: Function을 Python 3.12 Flex Consumption에 배포했습니다. 실제 HTTPS health 200과 미인증·사용자 헤더 위조·잘못된 Bearer 요청의 401을 확인했습니다.
+App Service 화면 배포·실제 원격 SSO와 Fabric 자연 예약 실행은 별도 작업입니다. Intune 정책 쓰기는 비활성 상태입니다.
