@@ -154,6 +154,13 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
             app.state.pair_policy_service = pair_policy_service or PairPolicyService(store, tenant_id, directory)
         return app.state.pair_policy_service
 
+    @app.get('/api/diagnostics/graph')
+    def graph_diagnostics(request: Request):
+        if 'USB.Operator' not in request.state.user.get('roles', []):
+            fail('진단에는 USB 운영자 역할이 필요합니다.', 403)
+        from .graph_diagnostics import diagnose
+        return diagnose(tenant_id)
+
     @app.get('/api/pair-policy')
     def pair_preview(request: Request):
         from .pair_policy import PairPolicyError
