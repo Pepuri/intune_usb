@@ -127,8 +127,16 @@ class AuthService:
                 trusted=any(ipaddress.ip_address(peer) in ipaddress.ip_network(c) for c in self.settings.trusted_proxy_cidrs)
             except ValueError:
                 trusted=False
-            if not trusted or request.headers.get('x-forwarded-proto','').lower() != 'https':
-                logging.warning('USB_HTTPS_PROXY_REJECTED peer=%s scheme=%s', peer, request.url.scheme)
+            # App Service supplies its own protocol marker after TLS termination.
+            # Prefer that marker when present; a trusted peer is still mandatory.
+            platform_proto = request.headers.get('x-appservice-proto', '').lower()
+            forwarded_proto = request.headers.get('x-forwarded-proto', '').lower()
+            effective_proto = platform_proto or forwarded_proto
+            if not trusted or effective_proto != 'https':
+                logging.warning('USB_HTTPS_PROXY_REJECTED peer=%s trusted=%s forwarded=%s platform=%s',
+                                peer, trusted,
+                                forwarded_proto if forwarded_proto in ('', 'http', 'https') else 'invalid',
+                                platform_proto if platform_proto in ('', 'http', 'https') else 'invalid')
                 return JSONResponse({'detail':'HTTPS 연결이 필요합니다.'},status_code=400)
             request.scope['scheme']='https'
         return None

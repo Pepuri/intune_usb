@@ -35,6 +35,30 @@ USER={'source':'entra','tenant_id':TENANT,'oid':OID,'roles':['USB.Operator'],'us
 PRIVATE=rsa.generate_private_key(public_exponent=65537,key_size=2048)
 
 
+@pytest.mark.parametrize('peer,headers,allowed', [
+    ('10.1.2.3', {'x-appservice-proto':'https'}, True),
+    ('10.1.2.3', {'x-forwarded-proto':'https'}, True),
+    ('10.1.2.3', {'x-appservice-proto':'http','x-forwarded-proto':'https'}, False),
+    ('10.1.2.4', {'x-appservice-proto':'https'}, False),
+    ('10.1.2.3', {'x-appservice-proto':'https,http','x-forwarded-proto':'https'}, False),
+])
+def test_app_service_tls_marker_requires_trusted_peer(peer, headers, allowed):
+    from app.auth import AuthService
+    from starlette.requests import Request
+    config = AuthSettings('entra', TENANT, WEB, 'test-credential',
+                          'https://web.example.invalid/auth/callback', True,
+                          trusted_proxy_cidrs=('10.1.2.3/32',))
+    auth = AuthService(config, shared_sessions=object())
+    headers = {'host':'web.example.invalid'} | headers
+    request = Request({'type':'http','scheme':'http','method':'GET','path':'/',
+                       'query_string':b'', 'server':('web.example.invalid',80),
+                       'client':(peer,1234),'headers':[(k.encode(),v.encode()) for k,v in headers.items()]})
+    result = auth.transport_guard(request)
+    assert (result is None) == allowed
+    if allowed:
+        assert request.scope['scheme'] == 'https'
+
+
 def access(**changes):
     now=time.time()
     payload={'iss':f'https://login.microsoftonline.com/{TENANT}/v2.0','aud':API,'tid':TENANT,
