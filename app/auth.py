@@ -1,5 +1,6 @@
 """Tenant-bound local Entra sign-in. Authentication tokens never enter the browser session."""
 import os
+import logging
 import secrets
 import threading
 import time
@@ -127,6 +128,7 @@ class AuthService:
             except ValueError:
                 trusted=False
             if not trusted or request.headers.get('x-forwarded-proto','').lower() != 'https':
+                logging.warning('USB_HTTPS_PROXY_REJECTED peer=%s scheme=%s', peer, request.url.scheme)
                 return JSONResponse({'detail':'HTTPS 연결이 필요합니다.'},status_code=400)
             request.scope['scheme']='https'
         return None
