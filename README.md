@@ -23,7 +23,7 @@ Python 3.12 가상환경에 `pip install -r requirements-dev.txt`로 의존성�
 App Service는 `dist/web.zip`, Function은 `dist/function.zip`을 각각 사용합니다.
 Fabric의 `code/source.zip`에는 `dist/fabric-worker.zip`을 사용합니다.
 이 ZIP은 소스 패키지입니다. Python 3.12 Linux에서 의존성 설치·원격 빌드가 추가로 필요합니다.
-현재 GitHub Actions는 검사와 패키징만 수행하며 Azure 로그인·배포 단계가 없습니다.
+`validate.yml`은 검사·패키징을 수행하고, `main_intuneusbfunction.yml`은 별도 Function 패키지를 Flex Consumption으로 배포합니다. App Service는 별도 배포 대상입니다.
 
 이 폴더에는 실제 고객사 테넌트·계정·리소스 식별자, 비밀 설정, 실행 증적을 포함하지 않습니다.
 fixture의 ID는 실존 리소스를 가리키지 않으며 예제 이름도 모두 가상입니다.

@@ -44,3 +44,11 @@ Blob lease·ETag·처리 영수증으로 중복 실행과 결과 복구를 처�
 - https://learn.microsoft.com/en-us/azure/azure-functions/python-build-options
 - https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push
 - https://learn.microsoft.com/en-us/azure/developer/python/python-web-app-github-actions-app-service
+
+## Function 시작 진단
+
+외부 저장소나 인증 설정 때문에 초기화가 실패하면 API는 업무 요청을 모두 503으로 차단합니다.
+호스트는 진단을 위해 인덱싱할 수 있도록 유지하며 health의 initialization_failed는 정상 준비 상태가 아닙니다.
+시작 로그에는 예외 유형·HTTP 상태·검증된 오류 코드만 기록하고 SDK 예외 본문과 자격증명은 기록하지 않습니다.
+Function의 관리 ID에는 앱 Files 폴더에 대한 ReadWrite와 필요한 메타데이터 접근만 부여합니다.
+실제 테넌트·앱·OneLake ID와 요청 서명 키는 Azure의 비공개 설정에서 관리하며 저장소에 넣지 않습니다.

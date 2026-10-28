@@ -1,12 +1,12 @@
 # GitHub 게시 준비
 
 이 폴더만 저장소로 사용합니다. 원래 운영 폴더나 상위 디렉터리를 통째로 올리지 않습니다.
-GitHub 소스 게시와 Azure 실제 배포는 별개입니다. 이 저장소의 워크플로는 Azure에 배포하지 않습니다.
+GitHub 소스 게시와 Azure 실제 배포는 별개입니다. Function 배포 워크플로는 GitHub OIDC로 인증하며, App Service 배포와 분리되어 있습니다.
 
 1. `python scripts/check-release.py`와 `python -m pytest -q`를 실행합니다.
 2. `python scripts/build-packages.py`로 별도 ZIP을 확인합니다.
 3. 게시할 계정·저장소 이름·공개 범위를 선택한 뒤 이 폴더에서만 Git을 초기화합니다.
-4. GitHub Actions는 테스트·패키징만 수행합니다. 자동 배포나 예약 실행은 포함하지 않습니다.
+4. 검사 워크플로와 Function 배포 워크플로를 구분합니다. Fabric 예약 실행은 별도로 설정합니다.
 
 비밀값·실제 환경 구성·DB·증적·로그·ZIP·.venv는 Git 제외 대상입니다.
 requirements와 테스트 fixture는 포함됩니다. 가상 sample_data는 고객사 데이터가 아닙니다.

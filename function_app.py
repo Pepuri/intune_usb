@@ -1,7 +1,10 @@
 """Local HTTP/timers or an Entra-protected Azure gateway for Lakehouse file commands."""
 import logging
 import os
+import re
 from pathlib import Path
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
 import azure.functions as func
 from usb_functions.api import create_business_api
@@ -19,9 +22,26 @@ if os.getenv('USB_PUBLISH_ADAPTER','mock')!='mock':
 
 key=os.getenv('USB_FUNCTION_BRIDGE_KEY','')
 database=None if cloud_mode() else os.getenv('USB_DEMO_DB',str(ROOT/'.data/demo.sqlite3'))
-api=create_business_api(database,key,os.getenv('ENTRA_TENANT_ID','22182a1f-8011-58a2-8ea1-2bab249da25a'),
-                        allow_demo=os.getenv('USB_FUNCTION_ALLOW_DEMO','0')=='1')
-engine=api.state.workflow
+try:
+    api=create_business_api(database,key,os.getenv('ENTRA_TENANT_ID','22182a1f-8011-58a2-8ea1-2bab249da25a'),
+                            allow_demo=os.getenv('USB_FUNCTION_ALLOW_DEMO','0')=='1')
+except Exception as error:
+    if not cloud_mode():
+        raise
+    # Keep the host indexable while failing closed. Never log exception text,
+    # tokens, connection strings, or request/response bodies from an SDK.
+    code = str(getattr(error, 'error_code', '') or '')
+    if not re.fullmatch(r'[A-Za-z0-9_.-]{0,100}', code):
+        code = 'redacted'
+    logging.error('USB_INITIALIZATION_FAILED type=%s status=%s code=%s',
+                  type(error).__name__, getattr(error, 'status_code', None), code)
+    api = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
+    @api.middleware('http')
+    async def unavailable(request, call_next):
+        return JSONResponse({'service':'usb-functions','mode':'azure',
+                             'status':'initialization_failed'}, status_code=503,
+                            headers={'Cache-Control':'no-store'})
+engine=getattr(api.state,'workflow',None)
 app=func.AsgiFunctionApp(app=api,http_auth_level=func.AuthLevel.ANONYMOUS if cloud_mode() else func.AuthLevel.FUNCTION,function_name='UsbBusinessHttp')
 
 
