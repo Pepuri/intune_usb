@@ -64,3 +64,10 @@ HTTPS 리다이렉트, Secure·HttpOnly·SameSite=Lax 쿠키, HSTS, 미인증 AP
 현재 Azure 원장은 신규 0건입니다. 기존 샘플 이관과 Graph 조회 소스·샘플 정책 대상의 운영 설정, Fabric 예약 처리는 별도 검증해야 합니다.
 
 TLS 전달 헤더: https://learn.microsoft.com/en-us/azure/app-service/configure-ssl-bindings
+
+## 비공개 업무 대상 설정
+
+Function의 USB_SAMPLE_DIRECTORY_JSON에는 고객사별 샘플 사용자 40명·테넌트·그룹·지정 정책 메타데이터 JSON을 넣고, USB_READ_SOURCES_JSON에는 조회 소스 메타데이터 JSON을 넣습니다. 실제 값은 소스 파일 대신 Azure 비공개 설정에서 관리합니다.
+환경 설정이 없으면 config/의 가상 fixture를 사용하므로 실제 로그인 테넌트와 다를 경우 업무 메뉴는 configuration_required(503)를 반환합니다. 설정 JSON의 대상 이외 그룹·정책 경로와 다른 테넌트는 계속 거부합니다.
+설정값은 프로세스 시작 시 대상 allowlist에 반영되므로 변경 후 재시작이 필요합니다. 예약 노트북도 같은 비공개 메타데이터를 환경에 전달한 후 업무 모듈을 로드해야 합니다.
+이 설정은 Graph 권한을 부여하지 않습니다. 권한 부족·연결 실패는 화면에 별도 상태로 표시하며 성공으로 처리하지 않습니다. 정책 쓰기 기본 OFF와 빈 PC 그룹 보호 조건은 유지합니다.

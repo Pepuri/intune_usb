@@ -19,6 +19,7 @@ from app.auth import actor
 from .workflow import Workflow
 from .bridge import protect_backend
 from .sample_directory import LAB_LOCK, LabError
+from app.configuration import ConfigurationError
 
 DEMO_DATE = date.fromisoformat(os.getenv('USB_DEMO_DATE', '2026-10-28'))
 
@@ -111,6 +112,10 @@ def eligible(row):
 
 def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=False, workflow=None, read_sources=None, sample_directory=None, pair_policy_service=None, store=None, remote_auth=None, command_queue=None, notebook_worker=False):
     app = FastAPI(title='USB local Functions API', docs_url=None, redoc_url=None, openapi_url=None)
+    @app.exception_handler(ConfigurationError)
+    @app.exception_handler(LabError)
+    async def configuration_unavailable(request, error):
+        return JSONResponse({'detail': str(error), 'code':'configuration_required'}, status_code=503)
     store = store or get_store(db_path)
     engine = workflow or Workflow(store, reference_date=None if cloud_mode() else DEMO_DATE)
     app.state.store = store

@@ -14,6 +14,7 @@ import msal
 from dotenv import dotenv_values
 from app.store import ROOT
 from app.runtime import cloud_mode
+from app.configuration import deployment_json, ConfigurationError
 
 GRAPH = 'https://graph.microsoft.com/v1.0'
 FABRIC = 'https://api.fabric.microsoft.com/v1'
@@ -72,9 +73,9 @@ def source_result(call):
 
 class ReadSources:
     def __init__(self, tenant_id, config=None, tokens=None, transport=None, sql_reader=None):
-        self.config = config or json.loads((ROOT / 'config/read-sources.json').read_text(encoding='utf-8'))
+        self.config = config if config is not None else deployment_json('USB_READ_SOURCES_JSON', 'read-sources.json')
         if self.config['tenant_id'] != tenant_id:
-            raise ValueError('Read sources must use the SSO tenant')
+            raise ConfigurationError('조회 소스의 테넌트 연결 설정을 확인해 주세요.')
         self.tokens = tokens or AppTokens(tenant_id)
         self.transport = transport
         self.sql_reader = sql_reader

@@ -14,9 +14,11 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
 
 from app.store import ROOT
+from app.configuration import deployment_json
 
-POLICY_ID = '93a76376-be46-5003-8bd5-f90695853547'
-POLICY_NAME = 'USB-SAMPLE-GROUP-FLOW-20261028'
+_TARGET = deployment_json('USB_SAMPLE_DIRECTORY_JSON', 'sample-tenant-resources.json').get('policy', {})
+POLICY_ID = str(uuid.UUID(_TARGET.get('id', '93a76376-be46-5003-8bd5-f90695853547')))
+POLICY_NAME = _TARGET.get('name', 'USB-SAMPLE-GROUP-FLOW-20261028')
 NAMESPACE = uuid.uuid5(uuid.NAMESPACE_URL, 'usb-sample-explicit-pairs-20261028')
 READ = 9
 WRITE = 18

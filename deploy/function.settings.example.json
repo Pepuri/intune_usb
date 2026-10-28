@@ -18,5 +18,7 @@
   "USB_PUBLISH_ADAPTER": "mock",
   "USB_FUNCTION_ALLOW_DEMO": "0",
   "USB_QUEUE_SCHEDULE": "0 0 * * * *",
-  "USB_EXPIRY_SCHEDULE": "0 0 * * * *"
+  "USB_EXPIRY_SCHEDULE": "0 0 * * * *",
+  "USB_SAMPLE_DIRECTORY_JSON": "<private JSON: tenant_id, user_group, device_group, users, policy>",
+  "USB_READ_SOURCES_JSON": "<private JSON: tenant_id and Fabric read-source settings>"
 }

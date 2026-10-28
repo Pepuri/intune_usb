@@ -10,11 +10,14 @@ from dotenv import dotenv_values
 
 from app.store import ROOT
 from app.runtime import write_flag
+from app.configuration import deployment_json
 from .read_sources import AppTokens, SourceError
 
-TENANT = '22182a1f-8011-58a2-8ea1-2bab249da25a'
-USERS = '29a01e82-62e5-55ad-a594-355fcc097923'
-PCS = '87461f6a-c5f3-5b39-9c90-6ca9a748df65'
+DEFAULT_CONFIG = deployment_json('USB_SAMPLE_DIRECTORY_JSON', 'sample-tenant-resources.json')
+TENANT = str(uuid.UUID(DEFAULT_CONFIG['tenant_id']))
+USERS = str(uuid.UUID(DEFAULT_CONFIG['user_group']['id']))
+PCS = str(uuid.UUID(DEFAULT_CONFIG['device_group']['id']))
+DOMAIN = DEFAULT_CONFIG['users'][0]['upn'].rsplit('@', 1)[1]
 GRAPH = 'https://graph.microsoft.com/v1.0'
 LAB_LOCK = threading.RLock()
 
@@ -30,8 +33,8 @@ class LabError(Exception):
 class SampleDirectory:
     def __init__(self, store, tenant_id, *, config=None, tokens=None, transport=None, enabled=None, today=None):
         self.store = store
-        self.config = config if config is not None else json.loads(
-            (ROOT / 'config/sample-tenant-resources.json').read_text(encoding='utf-8-sig'))
+        self.config = config if config is not None else deployment_json(
+            'USB_SAMPLE_DIRECTORY_JSON', 'sample-tenant-resources.json')
         if tenant_id != TENANT or self.config.get('tenant_id') != TENANT:
             raise LabError('샘플 테넌트가 일치하지 않습니다.')
         if self.config['user_group']['id'] != USERS or self.config['device_group']['id'] != PCS:
@@ -40,7 +43,7 @@ class SampleDirectory:
         if len(self.users) != 40 or len({r['object_id'] for r in self.users.values()}) != 40:
             raise LabError('샘플 계정 40명의 매핑을 확인해 주세요.')
         for i, r in enumerate(self.config['users'], 1):
-            if r['upn'] != f'usb.sample{i:03d}@example.invalid':
+            if r['upn'] != f'usb.sample{i:03d}@{DOMAIN}':
                 raise LabError('샘플 계정 허용 목록이 올바르지 않습니다.')
             uuid.UUID(r['object_id'])
         self.tokens = tokens or AppTokens(TENANT)
