@@ -68,3 +68,20 @@ def test_key_vault_reference_is_not_a_literal_secret():
     assert release.scan_bytes('deploy/plan.json', raw, set()) == []
     assert release.scan_bytes('deploy/plan.json', raw, {b'<web-client-secret>'}) == [
         {'path':'deploy/plan.json','rule':'known_local_secret'}]
+
+
+def test_service_packages_are_readable_by_linux_runtime_user(tmp_path):
+    import zipfile
+    root = release_tree(tmp_path)
+    for name in ('host.json', 'function_app.py', 'requirements.txt', 'requirements-fabric.txt'):
+        (root/name).write_text('{}' if name == 'host.json' else '', encoding='utf-8')
+    spec = importlib.util.spec_from_file_location('package_builder', ROOT/'scripts/build-packages.py')
+    builder = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(builder)
+    builder.build(root)
+    for name in ('web', 'function', 'fabric-worker'):
+        with zipfile.ZipFile(root/'dist'/f'{name}.zip') as package:
+            for entry in package.infolist():
+                mode = entry.external_attr >> 16
+                assert mode & 0o444 == 0o444, 'An unprivileged runtime user must be able to read source files'
+                assert not mode & 0o022, 'Source files must not be group/world writable'

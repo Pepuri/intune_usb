@@ -39,7 +39,11 @@ def build(root=ROOT):
                     raw = (root/name).read_bytes()
                     if hashlib.sha256(raw).hexdigest() != files[name]['sha256']:
                         raise RuntimeError('Source changed while packaging')
-                    package.writestr(name, raw)
+                    entry = zipfile.ZipInfo(name)
+                    entry.create_system = 3
+                    entry.external_attr = 0o100644 << 16
+                    entry.compress_type = zipfile.ZIP_DEFLATED
+                    package.writestr(entry, raw)
             with zipfile.ZipFile(temporary) as package:
                 if set(package.namelist()) != names:
                     raise RuntimeError('Archive layout mismatch')
