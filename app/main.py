@@ -90,7 +90,9 @@ def create_app(db_path=None, auth_settings=None, client_factory=None, function_t
             async with httpx.AsyncClient(base_url=endpoint,transport=function_transport,trust_env=False,timeout=150 if rest.startswith('pair-policy') else 90 if rest.startswith('sample-directory') else 75 if rest=='lookups/evaluate' else 20) as client:
                 result=await client.request(request.method,target,content=body,headers=headers)
         except httpx.RequestError:
-            return JSONResponse({'detail':'로컬 Function에 연결할 수 없습니다. Function 실행 상태를 확인해 주세요.'},status_code=503)
+            message = ('Function 서비스에 연결할 수 없습니다. 잠시 후 다시 시도하거나 서비스 상태를 확인해 주세요.'
+                       if settings.cloud else '로컬 Function에 연결할 수 없습니다. Function 실행 상태를 확인해 주세요.')
+            return JSONResponse({'detail':message},status_code=503)
         forwarded={k:v for k,v in result.headers.items() if k.lower() in ('content-type','content-disposition','x-usb-worker')}
         return Response(result.content,status_code=result.status_code,headers=forwarded)
 

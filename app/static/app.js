@@ -51,6 +51,7 @@ function historyView(){const rows=state.history.filter(h=>!historyTerm||[h.appro
 let renderSequence=0;
 async function render(){
  const expectedSequence=renderSequence+1;
+ $('#main').innerHTML='<div class="empty" role="status">화면 데이터를 불러오는 중입니다…</div>';
  try{await renderView();}
  catch(error){if(expectedSequence!==renderSequence)return;$('#main').innerHTML=header(currentView)+`<section class="panel"><div class="empty"><strong>화면을 불러오지 못했습니다</strong><p>${esc(error.message)}</p><button class="secondary" data-action="refresh">다시 불러오기</button></div></section>`;throw error;}
 }
