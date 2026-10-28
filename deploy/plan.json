@@ -1,5 +1,5 @@
 {
-  "status": "function_deployed_web_pending",
+  "status": "web_and_function_deployed_sso_verified",
   "storage": "OneLake Lakehouse Files; no SQL database",
   "runtime": "Python 3.12, App Service Linux + Functions v4 Linux",
   "web_startup_command": "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --no-proxy-headers --no-access-log",
@@ -30,21 +30,28 @@
   "cloud_policy_writes_default": false,
   "source_published": true,
   "validation_pending": [
-    "Linux build",
-    "Customer environment configuration",
-    "HTTPS SSO and remote Function",
-    "OneLake managed identity",
+    "Initial business ledger import and source/target environment configuration",
     "Fabric natural scheduled execution",
-    "Endpoint enforcement"
+    "Endpoint enforcement (outside current test scope)"
   ],
   "azure_function_deployed": true,
-  "azure_web_deployed": false,
+  "azure_web_deployed": true,
   "remote_function_verification": {
     "health_http": 200,
     "anonymous_api_http": 401,
     "spoofed_identity_http": 401,
-    "remote_sso_tested": false,
+    "remote_sso_tested": true,
     "runtime": "Python 3.12",
     "intune_writes_enabled": false
+  },
+  "web_verification": {
+    "actual_entra_login": true,
+    "operator_role_verified": true,
+    "function_state_query_verified": true,
+    "shared_session_survives_restart": true,
+    "https_only": true,
+    "anonymous_api_http": 401,
+    "intune_writes_enabled": false,
+    "initial_ledger_rows": 0
   }
 }

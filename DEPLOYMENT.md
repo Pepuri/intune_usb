@@ -52,3 +52,15 @@ Blob lease·ETag·처리 영수증으로 중복 실행과 결과 복구를 처�
 시작 로그에는 예외 유형·HTTP 상태·검증된 오류 코드만 기록하고 SDK 예외 본문과 자격증명은 기록하지 않습니다.
 Function의 관리 ID에는 앱 Files 폴더에 대한 ReadWrite와 필요한 메타데이터 접근만 부여합니다.
 실제 테넌트·앱·OneLake ID와 요청 서명 키는 Azure의 비공개 설정에서 관리하며 저장소에 넣지 않습니다.
+
+## App Service 실제 로그인 검증
+
+2026-10-29: App Service 화면과 별도 웹 전용 Entra 앱을 연결해 실제 운영자 로그인과 위임 토큰 기반 Function 원장 조회를 확인했습니다.
+기존 로컬 앱 등록은 유지합니다. 웹 전용 앱에는 Graph 애플리케이션 권한을 추가하지 않고 USB.Access 위임 scope와 운영자 역할을 사용합니다.
+공유 세션은 Lakehouse auth.json에 암호문으로 저장하며 재시작 뒤에도 유지됐습니다. 웹 관리 ID는 이 파일의 ReadWrite와 필요한 메타데이터 접근만 가집니다.
+App Service의 TLS 종료 뒤 프로토콜은 신뢰 프록시의 x-appservice-proto 또는 X-Forwarded-Proto로 확인합니다. 실제 관측한 내부 프록시 IP만 비공개 설정에 지정합니다.
+HTTPS 리다이렉트, Secure·HttpOnly·SameSite=Lax 쿠키, HSTS, 미인증 API의 401을 확인했습니다.
+실제 환경 식별자·클라이언트 비밀값·세션 암호화 키는 GitHub에 넣지 않습니다.
+현재 Azure 원장은 신규 0건입니다. 기존 샘플 이관과 Graph 조회 소스·샘플 정책 대상의 운영 설정, Fabric 예약 처리는 별도 검증해야 합니다.
+
+TLS 전달 헤더: https://learn.microsoft.com/en-us/azure/app-service/configure-ssl-bindings
