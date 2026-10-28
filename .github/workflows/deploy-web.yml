@@ -53,4 +53,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: usblogic
+          resource-group-name: Appservice
           package: web-package
