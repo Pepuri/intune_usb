@@ -1,0 +1,419 @@
+{
+  "tenant_id": "22182a1f-8011-58a2-8ea1-2bab249da25a",
+  "marker": "USB_SAMPLE_FLOW_20261028",
+  "users": [
+    {
+      "source_upn": "sample.user001@example.invalid",
+      "name": "진세아",
+      "department": "정보보안팀",
+      "upn": "usb.sample001@example.invalid",
+      "source_approval_id": "SAMPLE-APR-001",
+      "object_id": "f7a31923-ae60-5fe2-aa1a-5c6dbf07a410",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user002@example.invalid",
+      "name": "한서연",
+      "department": "경영지원팀",
+      "upn": "usb.sample002@example.invalid",
+      "source_approval_id": "SAMPLE-APR-002",
+      "object_id": "0cee2af4-9b35-5441-929c-b7df575b98bf",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user003@example.invalid",
+      "name": "민하율",
+      "department": "재무팀",
+      "upn": "usb.sample003@example.invalid",
+      "source_approval_id": "SAMPLE-APR-003",
+      "object_id": "e9eb5e3b-6404-5959-b57d-befc4a764f74",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user004@example.invalid",
+      "name": "배하준",
+      "department": "연구개발팀",
+      "upn": "usb.sample004@example.invalid",
+      "source_approval_id": "SAMPLE-APR-004",
+      "object_id": "911d0151-c70c-5266-b075-e3aa4f17b9df",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user005@example.invalid",
+      "name": "곽서진",
+      "department": "영업팀",
+      "upn": "usb.sample005@example.invalid",
+      "source_approval_id": "SAMPLE-APR-005",
+      "object_id": "1a3438fb-2d59-5046-9ac7-892deeee55c3",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user006@example.invalid",
+      "name": "오지우",
+      "department": "생산관리팀",
+      "upn": "usb.sample006@example.invalid",
+      "source_approval_id": "SAMPLE-APR-006",
+      "object_id": "cee00ad1-0b4f-558e-a0d7-9fefde5bd57d",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user007@example.invalid",
+      "name": "노준혁",
+      "department": "구매팀",
+      "upn": "usb.sample007@example.invalid",
+      "source_approval_id": "SAMPLE-APR-007",
+      "object_id": "d935ac40-5e8c-5813-b80c-7d9eb6298a07",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user008@example.invalid",
+      "name": "류유진",
+      "department": "품질관리팀",
+      "upn": "usb.sample008@example.invalid",
+      "source_approval_id": "SAMPLE-APR-008",
+      "object_id": "4cce6a9f-58f7-5109-8101-a1ee62f156fe",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user009@example.invalid",
+      "name": "문태오",
+      "department": "정보보안팀",
+      "upn": "usb.sample009@example.invalid",
+      "source_approval_id": "SAMPLE-APR-009",
+      "object_id": "0a93a5d4-ddab-5506-93ae-6eaf3d83eac2",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user010@example.invalid",
+      "name": "정시우",
+      "department": "경영지원팀",
+      "upn": "usb.sample010@example.invalid",
+      "source_approval_id": "SAMPLE-APR-010",
+      "object_id": "e83b4971-10f0-527a-9a4f-446e7c9dd2cf",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user011@example.invalid",
+      "name": "손예준",
+      "department": "재무팀",
+      "upn": "usb.sample011@example.invalid",
+      "source_approval_id": "SAMPLE-APR-011",
+      "object_id": "6f30b45e-27c3-50e0-9540-37b363ca9f7f",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user012@example.invalid",
+      "name": "전지훈",
+      "department": "연구개발팀",
+      "upn": "usb.sample012@example.invalid",
+      "source_approval_id": "SAMPLE-APR-012",
+      "object_id": "675489ed-1173-5f5e-a593-74afeb6f52d6",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user013@example.invalid",
+      "name": "안다은",
+      "department": "영업팀",
+      "upn": "usb.sample013@example.invalid",
+      "source_approval_id": "SAMPLE-APR-013",
+      "object_id": "b3c0f87c-c885-5e5d-b813-b4695f7fe315",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user014@example.invalid",
+      "name": "차지율",
+      "department": "생산관리팀",
+      "upn": "usb.sample014@example.invalid",
+      "source_approval_id": "SAMPLE-APR-014",
+      "object_id": "f7359ebb-6566-52e0-851c-51196add0018",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user015@example.invalid",
+      "name": "고시윤",
+      "department": "구매팀",
+      "upn": "usb.sample015@example.invalid",
+      "source_approval_id": "SAMPLE-APR-015",
+      "object_id": "4f9d4f86-416a-5a53-8930-ddaa3f273437",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user016@example.invalid",
+      "name": "홍나은",
+      "department": "품질관리팀",
+      "upn": "usb.sample016@example.invalid",
+      "source_approval_id": "SAMPLE-APR-016",
+      "object_id": "672e3906-1904-5fa4-8a5a-bb1557b9fdde",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user017@example.invalid",
+      "name": "강현우",
+      "department": "정보보안팀",
+      "upn": "usb.sample017@example.invalid",
+      "source_approval_id": "SAMPLE-APR-017",
+      "object_id": "1c96f770-4bd8-5ce2-a75b-2774400d4d0d",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user018@example.invalid",
+      "name": "주하린",
+      "department": "경영지원팀",
+      "upn": "usb.sample018@example.invalid",
+      "source_approval_id": "SAMPLE-APR-018",
+      "object_id": "78c75ba5-cc01-5a1f-aa4e-2019cd8b0368",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user019@example.invalid",
+      "name": "구채린",
+      "department": "재무팀",
+      "upn": "usb.sample019@example.invalid",
+      "source_approval_id": "SAMPLE-APR-019",
+      "object_id": "9e67bc6b-ce92-51bc-a8e8-0c09c44440fe",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user020@example.invalid",
+      "name": "성태민",
+      "department": "연구개발팀",
+      "upn": "usb.sample020@example.invalid",
+      "source_approval_id": "SAMPLE-APR-020",
+      "object_id": "77b9058d-e43d-58cf-842d-9e68e0ffe81d",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user021@example.invalid",
+      "name": "심서우",
+      "department": "영업팀",
+      "upn": "usb.sample021@example.invalid",
+      "source_approval_id": "SAMPLE-APR-021",
+      "object_id": "760aceb7-4fde-5904-b7c0-10b261e3f151",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user022@example.invalid",
+      "name": "윤건우",
+      "department": "생산관리팀",
+      "upn": "usb.sample022@example.invalid",
+      "source_approval_id": "SAMPLE-APR-022",
+      "object_id": "3d581dfc-190c-5cc6-bb48-6fefce2a167d",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user023@example.invalid",
+      "name": "허가윤",
+      "department": "구매팀",
+      "upn": "usb.sample023@example.invalid",
+      "source_approval_id": "SAMPLE-APR-023",
+      "object_id": "51ae97fe-a1ef-5610-9fed-59ae32614219",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user024@example.invalid",
+      "name": "양지안",
+      "department": "품질관리팀",
+      "upn": "usb.sample024@example.invalid",
+      "source_approval_id": "SAMPLE-APR-024",
+      "object_id": "17e53acf-be7d-5e4e-9223-7694718f542b",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user025@example.invalid",
+      "name": "박지호",
+      "department": "정보보안팀",
+      "upn": "usb.sample025@example.invalid",
+      "source_approval_id": "SAMPLE-APR-025",
+      "object_id": "22f0711e-e2cb-59c9-b4b5-f34f4f4760cb",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user026@example.invalid",
+      "name": "하은재",
+      "department": "경영지원팀",
+      "upn": "usb.sample026@example.invalid",
+      "source_approval_id": "SAMPLE-APR-026",
+      "object_id": "720310c7-6eb9-5f58-8ca9-761e324b69c3",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user027@example.invalid",
+      "name": "송채원",
+      "department": "재무팀",
+      "upn": "usb.sample027@example.invalid",
+      "source_approval_id": "SAMPLE-APR-027",
+      "object_id": "9ce26ec4-e2f7-5c25-9351-438e5cf90da1",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user028@example.invalid",
+      "name": "남유나",
+      "department": "연구개발팀",
+      "upn": "usb.sample028@example.invalid",
+      "source_approval_id": "SAMPLE-APR-028",
+      "object_id": "944adf1d-229c-57f4-9347-88ab05bad45b",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user029@example.invalid",
+      "name": "신민서",
+      "department": "영업팀",
+      "upn": "usb.sample029@example.invalid",
+      "source_approval_id": "SAMPLE-APR-029",
+      "object_id": "b6726d79-345e-5f4a-8eb9-4e59e6210dfb",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user030@example.invalid",
+      "name": "황예린",
+      "department": "생산관리팀",
+      "upn": "usb.sample030@example.invalid",
+      "source_approval_id": "SAMPLE-APR-030",
+      "object_id": "eacef29c-b7de-5732-bd51-fc78e1e44656",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user031@example.invalid",
+      "name": "김도윤",
+      "department": "구매팀",
+      "upn": "usb.sample031@example.invalid",
+      "source_approval_id": "SAMPLE-APR-031",
+      "object_id": "8190a1b0-382f-515d-a34a-eb98e955666d",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user032@example.invalid",
+      "name": "이서준",
+      "department": "품질관리팀",
+      "upn": "usb.sample032@example.invalid",
+      "source_approval_id": "SAMPLE-APR-032",
+      "object_id": "85ecc540-565a-5566-90b7-f5ca7d649fec",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user033@example.invalid",
+      "name": "권수아",
+      "department": "정보보안팀",
+      "upn": "usb.sample033@example.invalid",
+      "source_approval_id": "SAMPLE-APR-033",
+      "object_id": "06ea943e-226f-52b2-a8af-b376c970367f",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user034@example.invalid",
+      "name": "조준서",
+      "department": "경영지원팀",
+      "upn": "usb.sample034@example.invalid",
+      "source_approval_id": "SAMPLE-APR-034",
+      "object_id": "eafc78bd-4e93-5eed-9ed0-0bc46730ae7f",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user035@example.invalid",
+      "name": "백수빈",
+      "department": "재무팀",
+      "upn": "usb.sample035@example.invalid",
+      "source_approval_id": "SAMPLE-APR-035",
+      "object_id": "40032acd-1909-5526-9570-dfa2dca80f23",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user036@example.invalid",
+      "name": "우민준",
+      "department": "연구개발팀",
+      "upn": "usb.sample036@example.invalid",
+      "source_approval_id": "SAMPLE-APR-036",
+      "object_id": "91907128-fe9c-54dd-adfa-bc6eb71e8a89",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user037@example.invalid",
+      "name": "서하은",
+      "department": "영업팀",
+      "upn": "usb.sample037@example.invalid",
+      "source_approval_id": "SAMPLE-APR-037",
+      "object_id": "214ad55f-212f-54ca-a8e4-5ba82e1fcb59",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user038@example.invalid",
+      "name": "장우진",
+      "department": "생산관리팀",
+      "upn": "usb.sample038@example.invalid",
+      "source_approval_id": "SAMPLE-APR-038",
+      "object_id": "def7eb10-6800-5da4-aea8-51ffdb3f82ee",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user039@example.invalid",
+      "name": "최민재",
+      "department": "구매팀",
+      "upn": "usb.sample039@example.invalid",
+      "source_approval_id": "SAMPLE-APR-039",
+      "object_id": "d33318b4-259e-58f5-840d-255e6846f9a7",
+      "account_enabled": false,
+      "licensed": false
+    },
+    {
+      "source_upn": "sample.user040@example.invalid",
+      "name": "임도현",
+      "department": "품질관리팀",
+      "upn": "usb.sample040@example.invalid",
+      "source_approval_id": "SAMPLE-APR-040",
+      "object_id": "9670f548-ca19-592e-a6bd-8c0289ad05ba",
+      "account_enabled": false,
+      "licensed": false
+    }
+  ],
+  "user_group": {
+    "id": "29a01e82-62e5-55ad-a594-355fcc097923",
+    "name": "USB-SAMPLE-USERS-20261028",
+    "member_count": 39
+  },
+  "device_group": {
+    "id": "87461f6a-c5f3-5b39-9c90-6ca9a748df65",
+    "name": "USB-SAMPLE-PCS-20261028",
+    "member_count": 0
+  },
+  "licenses_assigned": 0,
+  "sample_group_write_permission": "GroupMember.ReadWrite.All",
+  "fixture_only": true
+}

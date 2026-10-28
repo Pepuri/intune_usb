@@ -1,0 +1,16 @@
+{
+  "USB_RUNTIME_MODE": "azure",
+  "ENTRA_TENANT_ID": "<tenant-id>",
+  "USB_ONELAKE_WORKSPACE_ID": "<workspace-id>",
+  "USB_ONELAKE_LAKEHOUSE_ID": "<lakehouse-id>",
+  "USB_ONELAKE_PREFIX": "usb-operations",
+  "USB_AUTH_MODE": "entra",
+  "ENTRA_CLIENT_ID": "<web-client-id>",
+  "ENTRA_CLIENT_SECRET": "@Microsoft.KeyVault(SecretUri=https://<vault-name>.vault.azure.net/secrets/<web-client-secret>/)",
+  "ENTRA_REDIRECT_URI": "https://<web-app-name>.azurewebsites.net/auth/callback",
+  "USB_FUNCTION_URL": "https://<function-app-name>.azurewebsites.net",
+  "USB_FUNCTION_AUDIENCE": "<api-client-id>",
+  "USB_FUNCTION_SCOPE": "api://<api-client-id>/USB.Access",
+  "USB_SESSION_ENCRYPTION_KEY": "@Microsoft.KeyVault(SecretUri=https://<vault-name>.vault.azure.net/secrets/<session-key>/)",
+  "USB_TRUSTED_PROXY_CIDRS": "<explicit-trusted-app-service-proxy-cidr>"
+}

@@ -1,0 +1,22 @@
+{
+  "USB_RUNTIME_MODE": "azure",
+  "ENTRA_TENANT_ID": "<tenant-id>",
+  "USB_ONELAKE_WORKSPACE_ID": "<workspace-id>",
+  "USB_ONELAKE_LAKEHOUSE_ID": "<lakehouse-id>",
+  "USB_ONELAKE_PREFIX": "usb-operations",
+  "FUNCTIONS_WORKER_RUNTIME": "python",
+  "FUNCTIONS_EXTENSION_VERSION": "~4",
+  "AzureWebJobsStorage__accountName": "<function-host-storage-account>",
+  "USB_FUNCTION_AUDIENCE": "<api-client-id>",
+  "USB_WEB_CLIENT_ID": "<web-client-id>",
+  "USB_REQUEST_SIGNING_KEY": "@Microsoft.KeyVault(SecretUri=https://<vault-name>.vault.azure.net/secrets/<request-signing-key>/)",
+  "USB_SOURCE_AUTH": "managed_identity",
+  "USB_CLOUD_SAMPLE_WRITES": "0",
+  "USB_PAIR_POLICY_WRITES": "0",
+  "USB_PAIR_POLICY_AUTO_PUBLISH": "0",
+  "USB_SAMPLE_GROUP_WRITES": "0",
+  "USB_PUBLISH_ADAPTER": "mock",
+  "USB_FUNCTION_ALLOW_DEMO": "0",
+  "USB_QUEUE_SCHEDULE": "0 0 * * * *",
+  "USB_EXPIRY_SCHEDULE": "0 0 * * * *"
+}

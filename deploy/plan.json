@@ -1,0 +1,41 @@
+{
+  "status": "template_not_deployed",
+  "storage": "OneLake Lakehouse Files; no SQL database",
+  "runtime": "Python 3.12, App Service Linux + Functions v4 Linux",
+  "web_startup_command": "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --no-proxy-headers --no-access-log",
+  "remote_auth": "Delegated Entra v2 access token: fixed tenant/issuer/audience/azp + USB.Access + API roles",
+  "state": "Files/usb-operations/state/ledger.json",
+  "sessions": "Files/usb-operations/state/auth.json (encrypted values)",
+  "requests": "Files/usb-operations/requests/<request_id>.json (HMAC signed)",
+  "results": "Files/usb-operations/results/<request_id>.json",
+  "notebook": "notebooks/usb_lakehouse_worker.ipynb",
+  "schedule": {
+    "timezone": "Asia/Seoul",
+    "daily_times": [
+      "08:00",
+      "13:00",
+      "18:00"
+    ],
+    "applied": false
+  },
+  "schedule_applied": false,
+  "notebook_concurrency": 1,
+  "function_cloud_timers": "no-op; notebook owns processing and expiry",
+  "default_lakehouse_required": true,
+  "existing_sample_tables_modified": false,
+  "analytics_outputs": [
+    "dbo.usb_app_documents",
+    "dbo.usb_app_jobs"
+  ],
+  "cloud_policy_writes_default": false,
+  "source_published": false,
+  "azure_deployed": false,
+  "validation_pending": [
+    "Linux build",
+    "Customer environment configuration",
+    "HTTPS SSO and remote Function",
+    "OneLake managed identity",
+    "Fabric natural scheduled execution",
+    "Endpoint enforcement"
+  ]
+}

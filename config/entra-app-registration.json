@@ -1,0 +1,55 @@
+{
+  "displayName": "USB-Control-Local-Dev",
+  "signInAudience": "AzureADMyOrg",
+  "requiredResourceAccess": [
+    {
+      "resourceAppId": "00000003-0000-0000-c000-000000000000",
+      "resourceAccess": [
+        {
+          "id": "17dd94b7-5522-55eb-bbcd-7aed81ee8162",
+          "type": "Role"
+        },
+        {
+          "id": "dac6450d-e34d-5077-b50e-593d9424df3c",
+          "type": "Role"
+        },
+        {
+          "id": "5f71a3ea-5527-56cf-9d17-a1a0ef6b66e9",
+          "type": "Role"
+        }
+      ]
+    }
+  ],
+  "web": {
+    "redirectUris": [
+      "http://localhost:8765/auth/callback"
+    ],
+    "logoutUrl": "http://localhost:8765/",
+    "implicitGrantSettings": {
+      "enableIdTokenIssuance": false,
+      "enableAccessTokenIssuance": false
+    }
+  },
+  "appRoles": [
+    {
+      "id": "6eb3389b-04a6-5f90-9b84-d62291f379ca",
+      "displayName": "USB Reader",
+      "value": "USB.Reader",
+      "description": "Read local sample USB ledgers and export results.",
+      "allowedMemberTypes": [
+        "User"
+      ],
+      "isEnabled": true
+    },
+    {
+      "id": "b12f778a-1be9-52df-9e9e-cb38c2d190bf",
+      "displayName": "USB Operator",
+      "value": "USB.Operator",
+      "description": "Manage local sample USB records and simulated operations. No Intune permission.",
+      "allowedMemberTypes": [
+        "User"
+      ],
+      "isEnabled": true
+    }
+  ]
+}

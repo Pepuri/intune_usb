@@ -1,0 +1,41 @@
+{
+  "api": {
+    "requestedAccessTokenVersion": 2,
+    "oauth2PermissionScopes": [
+      {
+        "id": "8d66233f-c1aa-587d-9fb5-41b6a1ef51f3",
+        "value": "USB.Access",
+        "type": "Admin",
+        "isEnabled": true,
+        "adminConsentDisplayName": "Access USB workflow API",
+        "adminConsentDescription": "Call the USB workflow API on behalf of a signed-in user."
+      }
+    ]
+  },
+  "identifierUris": [
+    "api://<api-client-id>"
+  ],
+  "appRoles": [
+    {
+      "id": "eb4530b3-5213-5bd6-81f3-5312737bda43",
+      "value": "USB.Reader",
+      "displayName": "USB Reader",
+      "description": "Read workflow state",
+      "allowedMemberTypes": [
+        "User"
+      ],
+      "isEnabled": true
+    },
+    {
+      "id": "170b4b7f-ba2f-5e60-8768-e4d51b58f235",
+      "value": "USB.Operator",
+      "displayName": "USB Operator",
+      "description": "Submit workflow commands",
+      "allowedMemberTypes": [
+        "User"
+      ],
+      "isEnabled": true
+    }
+  ],
+  "_instructions": "Template only. Separate web/API app registrations; assign roles to users on both service principals and grant the web app delegated USB.Access consent. No changes applied."
+}

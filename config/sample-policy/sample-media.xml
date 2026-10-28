@@ -1,0 +1,8 @@
+<Group Id="{76c0bb29-79b2-5216-9874-2a30d7379e23}" Type="Device">
+  <Name>USB SAMPLE synthetic media only</Name>
+  <MatchType>MatchAll</MatchType>
+  <DescriptorIdList>
+    <PrimaryId>RemovableMediaDevices</PrimaryId>
+    <SerialNumberId>SAMPLE-GROUP-FLOW-ONLY-20261028</SerialNumberId>
+  </DescriptorIdList>
+</Group>

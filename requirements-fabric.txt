@@ -1,0 +1,4 @@
+# Dedicated Fabric notebook Environment; keep FastAPI and tracing SDK/API compatible.
+-r requirements.txt
+opentelemetry-api==1.45.1
+opentelemetry-sdk==1.45.1

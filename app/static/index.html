@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>USB 운영 콘솔</title><link rel="icon" href="data:,"><link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script></head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="#overview"><span class="brandmark">U</span><span>USB CONTROL<small>보안 운영 워크스페이스</small></span></a>
+  <div class="workspace"><span class="workspace-icon">W</span><span>USB 접근 관리<small>로컬 테스트 환경</small></span><span class="workspace-dot"></span></div>
+  <p class="nav-label">WORKSPACE</p>
+  <nav aria-label="주 메뉴">
+    <a href="#overview" data-view="overview"><span class="icon">◫</span>운영 현황</a>
+    <a href="#ledger" data-view="ledger"><span class="icon">▤</span>USB 허용 원장<span class="nav-count" id="nav-count">40</span></a>
+    <a href="#register" data-view="register"><span class="icon">⊕</span>승인 정보 등록</a>
+    <a href="#deployment" data-view="deployment"><span class="icon">⇧</span>정책 배포 관리</a>
+    <a href="#sample" data-view="sample"><span class="icon">⇄</span>테넌트 샘플 검증</a>
+    <a href="#pairs" data-view="pairs"><span class="icon">⊞</span>페어링 정책</a>
+    <a href="#requests" data-view="requests" hidden><span class="icon">⇄</span>처리 요청</a>
+    <a href="#pcs" data-view="pcs"><span class="icon">▱</span>PC 관리</a>
+    <a href="#history" data-view="history"><span class="icon">◷</span>변경 이력</a>
+  </nav>
+  <div class="sidebar-bottom"><div class="connection"><span class="dot amber"></span>로컬 모의 운영</div><p>실제 Intune 정책은 변경되지 않습니다.</p><div class="operator"><span class="avatar">L</span><span>사용자 확인 중<small>로그인 정보를 불러오는 중</small></span></div></div>
+</aside>
+<div class="shell">
+  <header class="topbar"><div class="breadcrumb">워크스페이스 <span>/</span> <strong id="crumb">운영 현황</strong></div><div class="top-actions"><span class="demo-pill"><span class="dot"></span> SAMPLE DATA</span><button class="icon-button" data-action="refresh" aria-label="새로 고침">↻</button><span class="avatar small">L</span></div></header>
+  <main id="main" tabindex="-1"><div class="loading">데이터를 불러오는 중입니다…</div></main>
+  <footer><span>USB CONTROL · 로컬 프로토타입</span><span id="footer-date"></span></footer>
+</div>
+<dialog id="dialog" aria-labelledby="dialog-title"><div id="dialog-body"></div></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+</body></html>

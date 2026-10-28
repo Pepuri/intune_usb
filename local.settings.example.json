@@ -1,0 +1,13 @@
+{
+  "IsEncrypted":false,
+  "Values":{
+    "FUNCTIONS_WORKER_RUNTIME":"python",
+    "AzureWebJobsStorage":"UseDevelopmentStorage=true",
+    "USB_PUBLISH_ADAPTER":"mock",
+    "USB_QUEUE_SCHEDULE":"*/5 * * * * *",
+    "USB_EXPIRY_SCHEDULE":"0 * * * * *",
+    "USB_FUNCTION_ALLOW_DEMO":"0",
+    "USB_DEMO_DATE":"2026-10-28"
+  },
+  "Host":{"LocalHttpPort":7071,"CORSCredentials":false}
+}

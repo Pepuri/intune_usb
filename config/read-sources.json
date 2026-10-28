@@ -1,0 +1,10 @@
+{
+  "tenant_id": "22182a1f-8011-58a2-8ea1-2bab249da25a",
+  "fabric_workspace_id": "d948cd52-fbf2-5f01-b2e2-082fc6efd35e",
+  "fabric_lakehouse_id": "70ef7b74-dc17-585c-895b-30d702383e5e",
+  "fabric_database": "lh_appservice",
+  "fabric_server": "example.datawarehouse.fabric.microsoft.com",
+  "approvals_table": "dbo.sample_usb_approvals",
+  "pcs_table": "dbo.sample_usb_pcs",
+  "max_sync_age_hours": 24
+}

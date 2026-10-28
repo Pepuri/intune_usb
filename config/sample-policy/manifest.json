@@ -1,0 +1,40 @@
+{
+  "name": "USB-SAMPLE-GROUP-FLOW-20261028",
+  "mode": "sample_group_membership_flow",
+  "user_group": {
+    "id": "29a01e82-62e5-55ad-a594-355fcc097923",
+    "name": "USB-SAMPLE-USERS-20261028",
+    "member_count": 40
+  },
+  "device_group": {
+    "id": "87461f6a-c5f3-5b39-9c90-6ca9a748df65",
+    "name": "USB-SAMPLE-PCS-20261028",
+    "member_count": 0
+  },
+  "synthetic_usb_serial": "SAMPLE-GROUP-FLOW-ONLY-20261028",
+  "individual_user_usb_pairs_published": false,
+  "physical_device_tested": false,
+  "policy_body": {
+    "@odata.type": "#microsoft.graph.windows10CustomConfiguration",
+    "displayName": "USB-SAMPLE-GROUP-FLOW-20261028",
+    "description": "LAB ONLY | 40 disabled unlicensed sample users; ONE synthetic USB read-only; EMPTY target PC group. No default enforcement/baseline changes. Group wiring test, not original per-user USB approvals.",
+    "omaSettings": [
+      {
+        "@odata.type": "#microsoft.graph.omaSettingStringXml",
+        "displayName": "sample-media.xml",
+        "description": "LAB ONLY: synthetic USB; empty target PC group",
+        "omaUri": "./Vendor/MSFT/Defender/Configuration/DeviceControl/PolicyGroups/%7b76c0bb29-79b2-5216-9874-2a30d7379e23%7d/GroupData",
+        "fileName": "sample-media.xml",
+        "value": "PEdyb3VwIElkPSJ7NzZjMGJiMjktNzliMi01MjE2LTk4NzQtMmEzMGQ3Mzc5ZTIzfSIgVHlwZT0iRGV2aWNlIj4KICA8TmFtZT5VU0IgU0FNUExFIHN5bnRoZXRpYyBtZWRpYSBvbmx5PC9OYW1lPgogIDxNYXRjaFR5cGU+TWF0Y2hBbGw8L01hdGNoVHlwZT4KICA8RGVzY3JpcHRvcklkTGlzdD4KICAgIDxQcmltYXJ5SWQ+UmVtb3ZhYmxlTWVkaWFEZXZpY2VzPC9QcmltYXJ5SWQ+CiAgICA8U2VyaWFsTnVtYmVySWQ+U0FNUExFLUdST1VQLUZMT1ctT05MWS0yMDI2MTAyODwvU2VyaWFsTnVtYmVySWQ+CiAgPC9EZXNjcmlwdG9ySWRMaXN0Pgo8L0dyb3VwPg=="
+      },
+      {
+        "@odata.type": "#microsoft.graph.omaSettingStringXml",
+        "displayName": "sample-rule.xml",
+        "description": "LAB ONLY: synthetic USB; empty target PC group",
+        "omaUri": "./Vendor/MSFT/Defender/Configuration/DeviceControl/PolicyRules/%7b6bbcf9c3-5a75-5dfc-9216-489b615d7a1e%7d/RuleData",
+        "fileName": "sample-rule.xml",
+        "value": "PFBvbGljeVJ1bGUgSWQ9Ins2YmJjZjljMy01YTc1LTVkZmMtOTIxNi00ODliNjE1ZDdhMWV9Ij4KICA8TmFtZT5VU0IgU0FNUExFIGdyb3VwIHJlYWQtb25seSB3aXJpbmc8L05hbWU+CiAgPEluY2x1ZGVkSWRMaXN0PgogICAgPEdyb3VwSWQ+ezc2YzBiYjI5LTc5YjItNTIxNi05ODc0LTJhMzBkNzM3OWUyM308L0dyb3VwSWQ+CiAgPC9JbmNsdWRlZElkTGlzdD4KICA8RXhjbHVkZWRJZExpc3QgLz4KICA8RW50cnkgSWQ9InsxODBlM2ZhNS1jM2NkLTUyZWMtOTVjMy1kYzk3ZjYzZmJlZGN9Ij4KICAgIDxUeXBlPkFsbG93PC9UeXBlPgogICAgPE9wdGlvbnM+MDwvT3B0aW9ucz4KICAgIDxBY2Nlc3NNYXNrPjk8L0FjY2Vzc01hc2s+CiAgICA8U2lkPjI5YTAxZTgyLTYyZTUtNTVhZC1hNTk0LTM1NWZjYzA5NzkyMzwvU2lkPgogIDwvRW50cnk+CiAgPEVudHJ5IElkPSJ7NGU0OTRmMzMtZWFhYS01YzdlLThjYzYtOGIwMjM4MGZmYzAwfSI+CiAgICA8VHlwZT5EZW55PC9UeXBlPgogICAgPE9wdGlvbnM+MDwvT3B0aW9ucz4KICAgIDxBY2Nlc3NNYXNrPjU0PC9BY2Nlc3NNYXNrPgogICAgPFNpZD4yOWEwMWU4Mi02MmU1LTU1YWQtYTU5NC0zNTVmY2MwOTc5MjM8L1NpZD4KICA8L0VudHJ5PgogIDxFbnRyeSBJZD0ie2ZlMzc0NDc2LTA0NzUtNTRhOS1hZTViLWE0NzM4NGQ2M2MzOX0iPgogICAgPFR5cGU+QXVkaXRBbGxvd2VkPC9UeXBlPgogICAgPE9wdGlvbnM+MjwvT3B0aW9ucz4KICAgIDxBY2Nlc3NNYXNrPjk8L0FjY2Vzc01hc2s+CiAgICA8U2lkPjI5YTAxZTgyLTYyZTUtNTVhZC1hNTk0LTM1NWZjYzA5NzkyMzwvU2lkPgogIDwvRW50cnk+CjwvUG9saWN5UnVsZT4="
+      }
+    ]
+  }
+}

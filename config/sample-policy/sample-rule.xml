@@ -1,0 +1,25 @@
+<PolicyRule Id="{6bbcf9c3-5a75-5dfc-9216-489b615d7a1e}">
+  <Name>USB SAMPLE group read-only wiring</Name>
+  <IncludedIdList>
+    <GroupId>{76c0bb29-79b2-5216-9874-2a30d7379e23}</GroupId>
+  </IncludedIdList>
+  <ExcludedIdList />
+  <Entry Id="{180e3fa5-c3cd-52ec-95c3-dc97f63fbedc}">
+    <Type>Allow</Type>
+    <Options>0</Options>
+    <AccessMask>9</AccessMask>
+    <Sid>29a01e82-62e5-55ad-a594-355fcc097923</Sid>
+  </Entry>
+  <Entry Id="{4e494f33-eaaa-5c7e-8cc6-8b02380ffc00}">
+    <Type>Deny</Type>
+    <Options>0</Options>
+    <AccessMask>54</AccessMask>
+    <Sid>29a01e82-62e5-55ad-a594-355fcc097923</Sid>
+  </Entry>
+  <Entry Id="{fe374476-0475-54a9-ae5b-a47384d63c39}">
+    <Type>AuditAllowed</Type>
+    <Options>2</Options>
+    <AccessMask>9</AccessMask>
+    <Sid>29a01e82-62e5-55ad-a594-355fcc097923</Sid>
+  </Entry>
+</PolicyRule>
