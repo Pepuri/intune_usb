@@ -119,3 +119,21 @@ def test_identity_device_validation_duplicates_idempotency_and_reader(flow):
     assert call('POST','/api/approvals',registration(U2),roles=['USB.Reader']).status_code==403
     assert call('GET','/api/pairing-policy',roles=['USB.Reader']).status_code==200
     assert 'device_type' in call('GET','/api/export.csv').text
+
+
+def test_real_rehearsal_user_is_allowlisted_and_resolved_before_save(flow, monkeypatch):
+    from types import SimpleNamespace
+    import usb_functions.read_sources as sources
+    app,call,_=flow
+    upn='pilot@tenant.test'
+    body=registration(upn=upn)
+    assert call('POST','/api/approvals',body).status_code==422
+    monkeypatch.setenv('USB_REHEARSAL_USER_UPN',upn)
+    monkeypatch.setattr(sources,'ReadSources',lambda tenant:SimpleNamespace(user=lambda value:{
+        'id':U1,'accountEnabled':True,'userPrincipalName':upn}))
+    assert call('POST','/api/approvals',body|{'user_object_id':U2}).status_code==409
+    saved=call('POST','/api/approvals',body)
+    assert saved.status_code==201,saved.text
+    assert saved.json()['identity_source']=='graph_user_verified_device_assumed'
+    assert saved.json()['validation_status']=='not_observed'
+    assert call('POST','/api/approvals',body|{'user_upn':'other@tenant.test'}).status_code==422

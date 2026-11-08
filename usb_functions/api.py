@@ -65,7 +65,8 @@ class Registration(BaseModel):
     @field_validator('user_upn')
     @classmethod
     def fake_upn(cls, v):
-        if not v.lower().endswith('@example.invalid') or ' ' in v or v.count('@') != 1:
+        allowlisted = v.casefold() == os.getenv('USB_REHEARSAL_USER_UPN','').casefold()
+        if (not v.lower().endswith('@example.invalid') and not allowlisted) or ' ' in v or v.count('@') != 1:
             raise ValueError('로컬 데모는 @example.invalid 가상 계정만 사용할 수 있습니다.')
         return v.lower()
 
@@ -80,7 +81,7 @@ class Registration(BaseModel):
             self.usb_serial = checked.identifier
         else:
             import re
-            if self.permission == 'pairing_full' or self.device_type != 'usb' or self.user_object_id is not None or not re.fullmatch(r'SAMPLE-[A-Za-z0-9-]{1,93}', self.usb_serial):
+            if not self.user_upn.endswith('@example.invalid') or self.permission == 'pairing_full' or self.device_type != 'usb' or self.user_object_id is not None or not re.fullmatch(r'SAMPLE-[A-Za-z0-9-]{1,93}', self.usb_serial):
                 raise ValueError('기존 등록 경로의 USB 식별값 또는 권한이 올바르지 않습니다.')
         if self.valid_until_date < self.valid_from_date:
             raise ValueError('종료일은 시작일보다 빠를 수 없습니다.')
@@ -277,6 +278,7 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
         with store.connect() as db:
             return {'mode': 'azure_functions' if cloud_mode() else 'local_functions', 'reference_date': reference_day().isoformat(), 'loaded_at_utc': now(),
                     'pairing_local_enabled': pairing_preview_enabled(),
+                    'rehearsal_user_upn': os.getenv('USB_REHEARSAL_USER_UPN','') if pairing_preview_enabled() else '',
                     'approvals': store.rows(db, 'approvals'), 'pcs': sorted(store.rows(db, 'pcs'), key=lambda p:p['device_name']),
                     'sample_group_links': store.rows(db, 'sample_ledger_links'),
                     'history': sorted(store.rows(db, 'history'), key=lambda x: x['event_at_utc'], reverse=True)}
@@ -297,6 +299,16 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
             if prior:
                 if prior['hash']!=request_hash: fail('같은 요청 ID를 다른 내용으로 사용할 수 없습니다.')
                 return prior['response']
+            actual_user = None
+            if pairing and not body.user_upn.endswith('@example.invalid'):
+                from .read_sources import ReadSources, SourceError
+                try:
+                    sources = read_sources or ReadSources(tenant_id)
+                    actual_user = sources.user(body.user_upn)
+                except SourceError:
+                    fail('리허설 사용자의 실제 Entra 조회에 실패했습니다.', 503)
+                if actual_user.get('id') != str(body.user_object_id) or actual_user.get('accountEnabled') is not True:
+                    fail('실제 Entra 사용자 Object ID와 활성 상태를 확인해 주세요.')
             for old in store.rows(db, 'approvals'):
                 same_user = (old.get('user_object_id') == str(body.user_object_id) if pairing else old['user_upn'].lower() == body.user_upn)
                 if (same_user and old.get('device_type', 'usb') == body.device_type and old['usb_serial'].upper() == body.usb_serial.upper()
@@ -314,6 +326,8 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
             if pairing:
                 row.update(deployment_status='local_preview_pending', identity_source='manual_local_assumption',
                            bitlocker_state='unknown')
+                if actual_user:
+                    row['identity_source'] = 'graph_user_verified_device_assumed'
             if body.sample_group_key:
                 try:
                     linked_lab(request).link(db, row, body.sample_group_key, actor.get())
