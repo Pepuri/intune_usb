@@ -16,7 +16,7 @@ def digest(value):
 
 
 def allowed(row, day):
-    return (not row.get('sample_group_key') and row['approval_status'] in ('active','deployment_pending') and row['validation_status']=='verified'
+    return (row.get('policy_mode') != 'usb_mtp_pairing' and not row.get('sample_group_key') and row['approval_status'] in ('active','deployment_pending') and row['validation_status']=='verified'
             and row['valid_from_date']<=day.isoformat()<=row['valid_until_date']
             and (row['permission']!='read_write' or row['bitlocker_state']=='encrypted'))
 
@@ -60,7 +60,7 @@ class Workflow:
     def preview(self, db):
         rows=self.store.rows(db,'approvals')
         permits=[r for r in rows if allowed(r,self.reference_date)]
-        withdrawals=[r for r in rows if not r.get('sample_group_key') and (r['deployment_status']=='withdrawal_pending' or
+        withdrawals=[r for r in rows if r.get('policy_mode') != 'usb_mtp_pairing' and not r.get('sample_group_key') and (r['deployment_status']=='withdrawal_pending' or
                      (r['approval_status'] in ('active','deployment_pending') and r['valid_until_date']<self.reference_date.isoformat()
                       and r['deployment_status'] not in ('withdrawal_published','withdrawal_confirmed')))]
         pairs=[self.pair(r) for r in permits]
@@ -227,6 +227,22 @@ class Workflow:
             db.execute("UPDATE jobs SET status='queued',attempts=0,available=?,lease_until=0,error='',payload=?,updated=? WHERE id=?",
                        (time.time(),json.dumps(payload,ensure_ascii=False),stamp(),key))
             return self.get(db,key)
+
+    def expire_pairings(self, source='pairing-preview'):
+        """Update only the new preview ledger, without enqueuing any publisher work."""
+        expired=[]
+        with self.store.connect() as db:
+            for row in self.store.rows(db,'approvals'):
+                if (row.get('policy_mode')!='usb_mtp_pairing' or row['approval_status'] not in
+                    ('active','deployment_pending','verification_pending') or row['valid_until_date']>=self.reference_date.isoformat()):
+                    continue
+                before=row.copy()
+                row.update(approval_status='expired',deployment_status='not_published',
+                    revision=row.get('revision',1)+1,ledger_version=row.get('ledger_version',1)+1,updated_at_utc=stamp())
+                self.store.save(db,'approvals',row['approval_id'],row)
+                self.history(db,row,before,'expired','pairing.preview@example.invalid','페어링 기간 만료 · XML 후보 제외 · 실제 정책 변경 없음')
+                expired.append(row['approval_id'])
+        return {'expired_pairings':expired,'source':source,'policy_or_group_writes':False}
 
     def expire(self, source='manual'):
         with self.store.connect() as db:

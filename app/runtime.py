@@ -21,3 +21,11 @@ def write_flag(name, filename):
     from dotenv import dotenv_values
     from .store import ROOT
     return dotenv_values(ROOT/filename).get(name) == '1'
+
+
+def pairing_preview_enabled():
+    if not cloud_mode():
+        return True
+    return os.getenv('USB_PAIRING_PREVIEW_ENABLED') == '1' and all(
+        os.getenv(key, '0') == '0' for key in ('USB_CLOUD_SAMPLE_WRITES',
+        'USB_PAIR_POLICY_WRITES', 'USB_PAIR_POLICY_AUTO_PUBLISH', 'USB_SAMPLE_GROUP_WRITES'))

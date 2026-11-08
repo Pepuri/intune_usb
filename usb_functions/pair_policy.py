@@ -63,6 +63,9 @@ def compile_policy(rows, roster, day=None):
     excluded = []
     for row in sorted(rows, key=lambda r: r['approval_id']):
         reason = None
+        if row.get('policy_mode') == 'usb_mtp_pairing':
+            excluded.append({'approval_id': row['approval_id'], 'reason': 'local_pairing_preview_only'})
+            continue
         if row['approval_status'] not in ('active', 'deployment_pending'):
             reason = 'ended_or_not_approved'
         elif row['validation_status'] != 'verified':

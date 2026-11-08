@@ -14,7 +14,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from app.store import ROOT, Store, get_store
-from app.runtime import cloud_mode
+from app.runtime import cloud_mode, pairing_preview_enabled
 from app.auth import actor
 from .workflow import Workflow
 from .bridge import protect_backend
@@ -44,11 +44,14 @@ class Registration(BaseModel):
     user_display_name: str = Field(min_length=1, max_length=60)
     user_upn: str = Field(min_length=5, max_length=150)
     department: str = Field(min_length=1, max_length=60)
-    usb_serial: str = Field(min_length=8, max_length=100, pattern=r'^SAMPLE-[A-Za-z0-9-]+$')
+    usb_serial: str = Field(min_length=1, max_length=1024)
     usb_name: str = Field(min_length=1, max_length=100)
     approval_document_no: str = Field(min_length=3, max_length=80)
     request_reason: str = Field(min_length=3, max_length=500)
-    permission: Literal['read_only', 'read_write']
+    permission: Literal['read_only', 'read_write', 'pairing_full']
+    policy_mode: Literal['legacy', 'usb_mtp_pairing'] = 'legacy'
+    device_type: Literal['usb', 'mtp'] = 'usb'
+    user_object_id: uuid.UUID | None = None
     valid_from_date: date
     valid_until_date: date
     bitlocker_state: Literal['encrypted', 'not_encrypted', 'unknown'] = 'encrypted'
@@ -68,6 +71,17 @@ class Registration(BaseModel):
 
     @model_validator(mode='after')
     def dates(self):
+        if self.policy_mode == 'usb_mtp_pairing':
+            from .pairing_preview import PairingInput
+            if self.permission != 'pairing_full' or self.sample_group_key or not self.user_object_id:
+                raise ValueError('페어링은 사용자 Object ID와 전체 허용 권한이 필요하며 샘플 그룹 연결은 지원하지 않습니다.')
+            checked = PairingInput(user_object_id=self.user_object_id, device_type=self.device_type,
+                identifier=self.usb_serial, valid_from_date=self.valid_from_date, valid_until_date=self.valid_until_date)
+            self.usb_serial = checked.identifier
+        else:
+            import re
+            if self.permission == 'pairing_full' or self.device_type != 'usb' or self.user_object_id is not None or not re.fullmatch(r'SAMPLE-[A-Za-z0-9-]{1,93}', self.usb_serial):
+                raise ValueError('기존 등록 경로의 USB 식별값 또는 권한이 올바르지 않습니다.')
         if self.valid_until_date < self.valid_from_date:
             raise ValueError('종료일은 시작일보다 빠를 수 없습니다.')
         if self.valid_until_date < reference_day():
@@ -130,6 +144,10 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
         protect_remote(app, remote_auth or EntraAPI.from_env())
     else:
         protect_backend(app, store, bridge_key, tenant_id, allow_demo=allow_demo)
+
+    if pairing_preview_enabled():
+        from .pairing_preview import install_local_routes
+        install_local_routes(app, store, reference_day)
 
     def lab(request):
         if request.state.user.get('source') != 'entra':
@@ -258,12 +276,16 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
     def state():
         with store.connect() as db:
             return {'mode': 'azure_functions' if cloud_mode() else 'local_functions', 'reference_date': reference_day().isoformat(), 'loaded_at_utc': now(),
+                    'pairing_local_enabled': pairing_preview_enabled(),
                     'approvals': store.rows(db, 'approvals'), 'pcs': sorted(store.rows(db, 'pcs'), key=lambda p:p['device_name']),
                     'sample_group_links': store.rows(db, 'sample_ledger_links'),
                     'history': sorted(store.rows(db, 'history'), key=lambda x: x['event_at_utc'], reverse=True)}
 
     @app.post('/api/approvals', status_code=201)
     def register(body: Registration, request: Request):
+        pairing = body.policy_mode == 'usb_mtp_pairing'
+        if pairing and not pairing_preview_enabled():
+            fail('USB·MTP 페어링 원장 연결은 현재 로컬 검증 전용입니다.', 403)
         with LAB_LOCK, store.connect() as db:
             db.execute('BEGIN IMMEDIATE')
             data = body.model_dump(mode='json', exclude_none=True)
@@ -276,17 +298,22 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
                 if prior['hash']!=request_hash: fail('같은 요청 ID를 다른 내용으로 사용할 수 없습니다.')
                 return prior['response']
             for old in store.rows(db, 'approvals'):
-                if (old['user_upn'].lower() == body.user_upn and old['usb_serial'].upper() == body.usb_serial.upper()
+                same_user = (old.get('user_object_id') == str(body.user_object_id) if pairing else old['user_upn'].lower() == body.user_upn)
+                if (same_user and old.get('device_type', 'usb') == body.device_type and old['usb_serial'].upper() == body.usb_serial.upper()
                     and old['approval_status'] not in ('revoked', 'rejected', 'expired')
                     and old['valid_from_date'] <= data['valid_until_date'] and old['valid_until_date'] >= data['valid_from_date']):
                     fail('동일 사용자–USB 조합에 기간이 겹치는 등록이 있습니다.')
             key = 'LOCAL-APR-' + uuid.uuid4().hex[:10].upper()
             row = dict(data, approval_id=key, is_sample=True, sample_dataset_id='local-demo',
-                       user_object_id=str(uuid.uuid4()), usb_id='LOCAL-USB-' + uuid.uuid4().hex[:8],
+                       usb_id='LOCAL-USB-' + uuid.uuid4().hex[:8],
                        approval_status='verification_pending', validation_status='not_observed',
                        deployment_status='not_published', policy_profile_name='', ledger_version=1,
                        deployment_version=0, updated_at_utc=now(), revision=1, usb_vid='FFFF', usb_pid='0001',
                        last_observed_pc='', last_error='', revocation_reason='', withdrawal_confirmed_at_utc='')
+            row['user_object_id'] = str(body.user_object_id) if pairing else str(uuid.uuid4())
+            if pairing:
+                row.update(deployment_status='local_preview_pending', identity_source='manual_local_assumption',
+                           bitlocker_state='unknown')
             if body.sample_group_key:
                 try:
                     linked_lab(request).link(db, row, body.sample_group_key, actor.get())
@@ -294,6 +321,9 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
                 except LabError as error:
                     fail(str(error))
             store.save(db, 'approvals', key, row)
+            if pairing:
+                from .pairing_preview import approval_pairings, compile_pairing
+                compile_pairing(approval_pairings(store, db), reference_day())
             event(db, row, 'registered', {}, '그룹웨어 승인 정보 Function 접수 · 식별 검증 대기')
             if request_key: store.save(db,'requests',request_key,{'hash':request_hash,'response':row.copy()})
             return row
@@ -303,6 +333,11 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
         with LAB_LOCK, store.connect() as db:
             db.execute('BEGIN IMMEDIATE')
             row = get_row(db, key)
+            pairing = row.get('policy_mode') == 'usb_mtp_pairing'
+            if pairing and not pairing_preview_enabled():
+                fail('페어링 원장 변경은 현재 로컬 검증 전용입니다.', 403)
+            if pairing and action == 'confirm_device':
+                fail('로컬 XML 미리보기는 실제 단말 적용 확인으로 처리할 수 없습니다.')
             linked = store.get(db, 'sample_ledger_links', key)
             if linked:
                 linked_lab(request)
@@ -318,6 +353,8 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
                 if date.fromisoformat(row['valid_until_date']) < reference_day():
                     fail('만료된 승인은 검증 처리할 수 없습니다.')
                 row.update(validation_status='verified', approval_status='deployment_pending', deployment_status='publish_pending')
+                if pairing:
+                    row['deployment_status'] = 'local_preview_ready'
             elif action == 'extend':
                 if row['approval_status'] not in ('active', 'deployment_pending'):
                     fail('유효 또는 배포 대기 건만 연장할 수 있습니다.')
@@ -326,7 +363,8 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
                 if not body.approval_document_no or not body.approval_document_no.strip():
                     fail('연장 승인 기안번호가 필요합니다.', 422)
                 for other in store.rows(db, 'approvals'):
-                    if (other['approval_id'] != key and other['user_upn'].lower() == row['user_upn'].lower()
+                    same_user = (other.get('user_object_id') == row['user_object_id'] if pairing else other['user_upn'].lower() == row['user_upn'].lower())
+                    if (other['approval_id'] != key and same_user and other.get('device_type', 'usb') == row.get('device_type', 'usb')
                         and other['usb_serial'].upper() == row['usb_serial'].upper()
                         and other['approval_status'] not in ('revoked', 'rejected', 'expired')
                         and other['valid_from_date'] <= body.valid_until_date.isoformat()
@@ -334,12 +372,16 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
                         fail('연장 기간이 같은 사용자–USB 조합의 다른 승인과 겹칩니다.')
                 row.update(valid_until_date=body.valid_until_date.isoformat(), approval_document_no=body.approval_document_no.strip(),
                            approval_status='deployment_pending', deployment_status='publish_pending')
+                if pairing:
+                    row['deployment_status'] = 'local_preview_ready'
             elif action == 'revoke':
                 if row['approval_status'] not in ('active', 'deployment_pending', 'verification_pending'):
                     fail('이미 종료된 건은 다시 회수할 수 없습니다.')
                 never_published = row['deployment_status'] == 'not_published' and not row.get('deployment_version', 0)
                 row.update(approval_status='revoked', revocation_reason=body.reason,
                            deployment_status='not_published' if never_published else 'withdrawal_pending')
+                if pairing:
+                    row['deployment_status'] = 'not_published'
             else:
                 if row['deployment_status'] not in ('published', 'withdrawal_published'):
                     fail('모의 정책 게시 이후에만 단말 확인을 기록할 수 있습니다.')
@@ -354,6 +396,9 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
             if linked:
                 row['deployment_status'] = 'sample_group_managed'
             store.save(db, 'approvals', key, row)
+            if pairing:
+                from .pairing_preview import approval_pairings, compile_pairing
+                compile_pairing(approval_pairings(store, db), reference_day())
             if linked:
                 linked_lab(request).queue(db, key, actor.get())
             event(db, row, action, before, '로컬 모의 처리 · ' + body.reason)
@@ -398,6 +443,8 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
     @app.post('/api/expiry/scan')
     def expiry():
         with LAB_LOCK:
+            if cloud_mode() and pairing_preview_enabled():
+                return engine.expire_pairings(source='notebook-pairing-preview')
             return engine.expire(source='manual-api')
 
     class PCChange(BaseModel):
@@ -437,7 +484,7 @@ def create_business_api(db_path=None, bridge_key='', tenant_id='', allow_demo=Fa
         if ids:
             selected = set(ids.split(','))
             rows = [r for r in rows if r['approval_id'] in selected]
-        columns = ['approval_id','user_display_name','user_upn','department','usb_serial','permission','valid_from_date',
+        columns = ['approval_id','user_display_name','user_upn','user_object_id','department','policy_mode','device_type','usb_serial','permission','valid_from_date',
                    'valid_until_date','approval_status','validation_status','deployment_status','approval_document_no','is_sample']
         buf = io.StringIO(newline='')
         writer = csv.writer(buf)

@@ -71,3 +71,17 @@ Function의 USB_SAMPLE_DIRECTORY_JSON에는 고객사별 샘플 사용자 40명�
 환경 설정이 없으면 config/의 가상 fixture를 사용하므로 실제 로그인 테넌트와 다를 경우 업무 메뉴는 configuration_required(503)를 반환합니다. 설정 JSON의 대상 이외 그룹·정책 경로와 다른 테넌트는 계속 거부합니다.
 설정값은 프로세스 시작 시 대상 allowlist에 반영되므로 변경 후 재시작이 필요합니다. 예약 노트북도 같은 비공개 메타데이터를 환경에 전달한 후 업무 모듈을 로드해야 합니다.
 이 설정은 Graph 권한을 부여하지 않습니다. 권한 부족·연결 실패는 화면에 별도 상태로 표시하며 성공으로 처리하지 않습니다. 정책 쓰기 기본 OFF와 빈 PC 그룹 보호 조건은 유지합니다.
+
+
+## USB·MTP 원장 미리보기
+
+Function 및 Fabric 노트북의 `USB_PAIRING_PREVIEW_ENABLED=1`은 USB·MTP 등록·검증·연장·회수와
+XML 후보 조회를 활성화합니다. 네 개 쓰기 플래그가 모두 0인 경우에만 활성화되며 실제 Intune
+정책이나 그룹을 변경하지 않습니다. 기존 Entra SSO와 요청 서명은 그대로 사용합니다.
+웹 입력은 Lakehouse 요청 파일로 접수되고 기존 08:00·13:00·18:00 KST 노트북이 처리합니다.
+새 원장 행은 `policy_mode=usb_mtp_pairing`으로 구분하며 기존 승인 행은 자동 승격하지 않습니다.
+정책 메뉴는 `approvals` 원장에서 유효하고 검증된 행을 직접 읽어 XML을 생성합니다.
+입력 Object ID의 식별 검증은 현재 수동 가정이며 실제 Graph 조회 결과로 표시하지 않습니다.
+정기 처리의 만료 갱신은 새 페어링 행으로 제한하며 기존 원장·테이블·정책에는 적용하지 않습니다.
+노트북 패키지를 바꿀 때는 `lookup-worker.zip`을 교체하고 노트북의 SOURCE_SHA256도 맞춥니다.
+예약 시간, Environment, Lakehouse, Key Vault 및 로그인 연결은 변경하지 않습니다.

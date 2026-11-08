@@ -91,6 +91,8 @@ def install_queue(app, queue):
     @app.middleware('http')
     async def file_commands(request, call_next):
         if request.method=='POST':
+            if request.url.path == '/api/pairing-policy/publish':
+                return JSONResponse({'detail':'페어링 XML 미리보기 전용 · 실제 정책 반영 비활성'},status_code=403)
             if not allowed(request.url.path) or request.url.query:
                 return JSONResponse({'detail':'지원하지 않는 파일 처리 경로입니다.'},status_code=404)
             raw=await request.body()
